@@ -1,0 +1,125 @@
+openapi: 3.0.0
+info:
+  title: Exercise Ingredient
+  version: 1.0.0
+
+servers:
+  - 'http://localhost:8080'
+
+paths:
+  /ingredients:
+    get:
+      responses:
+        200:
+          description: List of ingredient returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Laitue
+                    price:
+                      type: number
+                      example: 800
+                    category:
+                      type: string
+                      example: vegetable
+
+  /ingredients/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+      responses:
+        200:
+          description: List ingredient with identifier returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Laitue
+                    price:
+                      type: number
+                      example: 800
+                    category:
+                      type: string
+                      example: vegetable
+        404:
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Id not found
+
+
+  /ingredients/{id}/stock:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+        - name: at
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+
+        - name: unit
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ PCS, KG, L ]
+
+      responses:
+        '200':
+          description: Stock récupéré avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  unit:
+                    type: string
+                    enum: [ PCS, KG, L ]
+                  value:
+                    type: number
+
+        '400':
+          description: Paramètres obligatoires manquants
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Either mandatory query parameter `at` or `unit` is not provided."
+
+        '404':
+          description: Ingrédient non trouvé
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Ingredient.id={id} is not found"
+

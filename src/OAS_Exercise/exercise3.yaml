@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: OAS - Exercise 3
+  version: 1.0.0
+
+servers:
+  - 'http://localhost:8080'
+
+paths:
+  /tasks:
+    get:
+      responses:
+        200:
+            description: return tasks List
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Task'
+
+
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Task'
+      responses:
+        201:
+          description: create tasks list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+
+    delete:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              properties:
+                taskIdentifier:
+                  type: integer
+      responses:
+        200:
+          description: delete tasks list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+  /tasks/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            required: true
+      responses:
+        200:
+          description: return tasks list with id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+
+        404:
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: task not found
+    delete:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            required: true
+
+      responses:
+        200:
+          description: delete tasks with id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Faire les courses
+        completed:
+          type: boolean
+

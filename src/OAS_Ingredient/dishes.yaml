@@ -1,0 +1,81 @@
+openapi: 3.1.0
+info:
+  title: Dishes
+  description: Dishes
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  /dishes:
+    get:
+      responses:
+        200:
+          description: Dishes List returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Salade Fraîche
+                    dish_type:
+                      type: string
+                      example: start
+                    selling_price:
+                      type: number
+                      example: 3500
+
+  /dishes/{id}/ingredients:
+    put:
+      summary: Associer ou dissocier des ingrédients à un plat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  category:
+                    type: string
+                  price:
+                    type: number
+
+      responses:
+        '200':
+          description: Mise à jour réussie
+
+        '400':
+          description: Corps de requête manquant
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Request body is required."
+
+        '404':
+          description: Plat non trouvé
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Dish.id={id} is not found"
+
